@@ -72,7 +72,7 @@ const getPlaceByUserId = async (req, res, next) => {
 };
 
 const createPlace = async (req, res, next) => {
-  console.log('Going to load body: '+req.body.title);
+  console.log("Going to load body: " + req.body.title);
   const errors = validationResult(req);
   console.log(errors);
   if (!errors.isEmpty()) {
@@ -95,8 +95,7 @@ const createPlace = async (req, res, next) => {
     description,
     address,
     location: geoCoordinates,
-    image:
-      "https://marvel-b1-cdn.bc0a.com/f00000000179470/www.esbnyc.com/sites/default/files/styles/small_feature/public/2019-10/home_banner-min.jpg?itok=uZt-03Vw",
+    image: req.file.path,
     creator,
   });
 
@@ -159,7 +158,7 @@ const updatePlace = async (req, res, next) => {
     return next(error);
   }
 
-  if(place.creator.toString() !== req.userData.userId){
+  if (place.creator.toString() !== req.userData.userId) {
     const error = new HttpError(
       "You do not have permission to edit this place.",
       401
@@ -202,7 +201,7 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
 
-  if(place.creator.id !== req.userData.userId){
+  if (place.creator.id !== req.userData.userId) {
     const error = new HttpError(
       "You do not have permission to delete this place.",
       401

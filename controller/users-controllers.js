@@ -27,7 +27,6 @@ const getUsers = async (req, res, next) => {
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors);
     return next(
       new HttpError("Invalid inputs passed, please check your data.", 422)
     );
@@ -55,17 +54,15 @@ const signup = async (req, res, next) => {
   try {
     hashedPassword = await bcrypt.hash(password, 12);
   } catch (err) {
-    console.log('here in bcrypt' + err);
+    console.log("here in bcrypt" + err);
     const error = new HttpError("Could not create user, please try again", 500);
     return next(error);
-    
   }
 
   const newUser = new User({
     name,
     email,
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg",
+    image: req.file.path,
     password: hashedPassword,
     places: [],
   });
@@ -154,7 +151,7 @@ const login = async (req, res, next) => {
   }
 
   res.json({
-    message: 'Logged in!',
+    message: "Logged in!",
     userId: existingUser.id,
     email: existingUser.email,
     token: token,
